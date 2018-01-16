@@ -1,4 +1,6 @@
 //app.js
+require('./libs/regenerator-runtime.js');
+
 App({
   onLaunch: function () {
     // 展示本地存储能力

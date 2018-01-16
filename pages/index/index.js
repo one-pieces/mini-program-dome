@@ -16,18 +16,16 @@ Page({
     channel: []
   },
   getIndexData() {
-    util.request(api.IndexUrl).then((res) => {
-      if (res.errno === 0) {
-        this.setData({
-          newGoods: res.data.newGoodsList,
-          hotGoods: res.data.hotGoodsList,
-          topics: res.data.topicList,
-          brand: res.data.brandList,
-          floorGoods: res.data.categoryList,
-          banner: res.data.banner,
-          channel: res.data.channel
-        });
-      }
+    util.request(api.IndexUrl).then((data) => {
+      this.setData({
+        newGoods: data.newGoodsList,
+        hotGoods: data.hotGoodsList,
+        topics: data.topicList,
+        brand: data.brandList,
+        floorGoods: data.categoryList,
+        banner: data.banner,
+        channel: data.channel
+      });
     });
   },
   //事件处理函数

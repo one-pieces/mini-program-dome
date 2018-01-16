@@ -31,7 +31,18 @@ const request = (url, data = {}, method = 'GET') => {
           if (res.data.errno === 401) {
             console.log('快去登录');
           } else {
-            resolve(res.data);
+            const { data, errmsg, errno } = res.data;
+            if (errno === 0) {
+              resolve(data);
+            } else {
+              console.log(errmsg);
+              wx.showToast({
+                image: '/static/images/icon_error.png',
+                title: errmsg,
+                mask: true
+              });
+              reject(errmsg);
+            }
           }
         } else {
           reject(res.errMsg);
