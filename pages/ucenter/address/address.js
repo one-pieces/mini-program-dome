@@ -1,9 +1,8 @@
-// pages/ucenter/index/index.js
-import user from '../../../services/user.js';
+// pages/ucenter/address/address.js
 import util from '../../../utils/util.js';
+import api from '../../../config/api.js';
 // 在微信小程序使用async,await需要引入regeneratorRuntime变量，具体请看https://ninghao.net/blog/5508
 import regeneratorRuntime from '../../../libs/regenerator-runtime';
-const app = getApp();
 
 Page({
 
@@ -11,46 +10,48 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: {}
+    addressList: []
   },
   /**
-   * 登录
+   * 获取地址列表
    */
-  async goLogin() {
-    try {
-      const { userInfo, token } = await user.loginByWeixin();
-      app.globalData.userInfo = userInfo;
-      app.globalData.token = token;
-      this.setdata({ userInfo });
-    } catch(err) {
-      console.log('goLogin fail, ', err);
-      util.showErrorToast(err);
-    }
+  async getAddressList() {
+    const addressList = await util.request(api.AddressList);
+    this.setData({ addressList });
   },
   /**
-   * 登出用户
+   * 增加或修改地址
    */
-  exitLogin() {
+  addressAddOrUpdate(event) {
+    const { addressId } = event.currentTarget.dataset;
+    console.log(event);
+    wx.navigateTo({
+      url: `/pages/ucenter/addressAdd/addressAdd?id=${addressId}`
+    })
+  },
+  /**
+   * 删除地址
+   */
+  deleteAddress(event) {
+    console.log(event);
     wx.showModal({
       title: '',
-      content: '退出登录？',
-      success(res) {
+      content: '确定要删除该地址？',
+      success: async (res) => {
         if (res.confirm) {
-          wx.removeStorageSync('token');
-          wx.removeStorageSync('userInfo');
-          wx.switchTab({
-            url: '/pages/index/index'
-          });
+          const { addressId: id } = event.target.dataset;
+          await util.requset(api.AddressDelete, { id }, 'POST');
+          this.getAddressList();
         }
       }
-    });
+    })
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log('app globalData', app.globalData);
+    this.getAddressList();
   },
 
   /**
@@ -64,17 +65,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    const userInfo = wx.getStorageSync('userInfo');
-    const token = wx.getStorageSync('token');
-
-    if (userInfo && token) {
-      app.globalData.userInfo = userinfo;
-      app.globalData.token = token;
-    }
-
-    this.setData({
-      userInfo: app.globalData.userInfo
-    });
+  
   },
 
   /**

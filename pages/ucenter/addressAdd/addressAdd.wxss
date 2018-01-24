@@ -1,0 +1,12 @@
+/* pages/ucenter/addressAdd/addressAdd.wxss */
+page {
+  height: 100%;
+  background: #f4f4f4;
+}
+
+add-address .add-form {
+  background: #fff;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}

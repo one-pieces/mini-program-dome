@@ -4,7 +4,8 @@
 
 import util from '../utils/util.js';
 import api from '../config/api.js';
-require('../libs/regenerator-runtime.js');
+// 在微信小程序使用async,await需要引入regeneratorRuntime变量，具体请看https://ninghao.net/blog/5508
+import regeneratorRuntime from '../libs/regenerator-runtime';
 
 /**
  * 调用微信登录
@@ -12,6 +13,7 @@ require('../libs/regenerator-runtime.js');
 const loginByWeixin = () => {
   return new Promise(async (resolve, reject) => {
     try {
+      // 发送 res.code 到后台换取 openId, sessionKey, unionId
       const { code } = await util.login();
       const userInfo = await util.getUserInfo();
       const res = await util.request(api.AuthLoginByWeixin, { code, userInfo }, 'POST');

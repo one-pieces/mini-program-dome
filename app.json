@@ -6,7 +6,11 @@
     "pages/cart/cart",
     "pages/topic/topic",
     "pages/catalog/catalog",
-    "pages/ucenter/index/index"
+    "pages/ucenter/index/index",
+    "pages/ucenter/order/order",
+    "pages/ucenter/orderDetail/orderDetail",
+    "pages/ucenter/address/address",
+    "pages/ucenter/addressAdd/addressAdd"
   ],
   "window": {
     "backgroundTextStyle": "dark",

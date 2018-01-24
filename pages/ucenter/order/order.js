@@ -1,9 +1,8 @@
-// pages/ucenter/index/index.js
-import user from '../../../services/user.js';
+// pages/ucenter/order/order.js
 import util from '../../../utils/util.js';
+import api from '../../../config/api.js';
 // 在微信小程序使用async,await需要引入regeneratorRuntime变量，具体请看https://ninghao.net/blog/5508
 import regeneratorRuntime from '../../../libs/regenerator-runtime';
-const app = getApp();
 
 Page({
 
@@ -11,38 +10,21 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: {}
+    orderList: []
   },
   /**
-   * 登录
+   * 获取订单列表
    */
-  async goLogin() {
-    try {
-      const { userInfo, token } = await user.loginByWeixin();
-      app.globalData.userInfo = userInfo;
-      app.globalData.token = token;
-      this.setdata({ userInfo });
-    } catch(err) {
-      console.log('goLogin fail, ', err);
-      util.showErrorToast(err);
-    }
+  async getOrderList() {
+    const { data: orderList } = await util.request(api.OrderList);
+    this.setData({ orderList });
   },
   /**
-   * 登出用户
+   * 跳转到付款页面
    */
-  exitLogin() {
-    wx.showModal({
-      title: '',
-      content: '退出登录？',
-      success(res) {
-        if (res.confirm) {
-          wx.removeStorageSync('token');
-          wx.removeStorageSync('userInfo');
-          wx.switchTab({
-            url: '/pages/index/index'
-          });
-        }
-      }
+  payOrder() {
+    wx.redirectTo({
+      url: '/pages/pay/pay'
     });
   },
 
@@ -50,7 +32,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log('app globalData', app.globalData);
+    this.getOrderList();
   },
 
   /**
@@ -64,17 +46,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    const userInfo = wx.getStorageSync('userInfo');
-    const token = wx.getStorageSync('token');
-
-    if (userInfo && token) {
-      app.globalData.userInfo = userinfo;
-      app.globalData.token = token;
-    }
-
-    this.setData({
-      userInfo: app.globalData.userInfo
-    });
+  
   },
 
   /**
