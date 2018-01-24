@@ -5,6 +5,8 @@ module.exports = {
   IndexUrl: NewApiRootUrl + 'index/index', //首页数据接口
   CatalogList: NewApiRootUrl + 'catalog/index',  //分类目录全部分类数据接口
   CatalogCurrent: NewApiRootUrl + 'catalog/current',  //分类目录当前分类数据接口
+  
+  AuthLoginByWeixin: NewApiRootUrl + 'auth/loginByWeixin', //微信登录
 
   GoodsCount: NewApiRootUrl + 'goods/count',  //统计商品总数
   GoodsList: NewApiRootUrl + 'goods/list',  //获得商品列表
@@ -27,6 +29,7 @@ module.exports = {
   CartCheckout: NewApiRootUrl + 'cart/checkout', // 下单前信息确认
 
   OrderSubmit: NewApiRootUrl + 'order/submit', // 提交订单
+  PayPrepayId: NewApiRootUrl + 'pay/prepay', //获取微信统一下单prepay_id
 
   CollectList: NewApiRootUrl + 'collect/list',  //收藏列表
   CollectAddOrDelete: NewApiRootUrl + 'collect/addordelete',  //添加或取消收藏

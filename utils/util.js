@@ -113,7 +113,7 @@ const getUserInfo = () => {
 /**
  * 跳转到指定页面
  */
-const redirect = (url) => {
+const redirectTo = (url) => {
   if (url) {
     wx.redirectTo({ url });
     return;
