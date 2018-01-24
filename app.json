@@ -3,7 +3,10 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/goods/goods",
-    "pages/cart/cart"
+    "pages/cart/cart",
+    "pages/topic/topic",
+    "pages/catalog/catalog",
+    "pages/ucenter/index/index"
   ],
   "window": {
     "backgroundTextStyle": "dark",

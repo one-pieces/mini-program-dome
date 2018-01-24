@@ -2,7 +2,7 @@
 import util from '../../utils/util.js';
 import api from '../../config/api.js';
 // 在微信小程序使用async,await需要引入regeneratorRuntime变量，具体请看https://ninghao.net/blog/5508
-import regeneratorRuntime from '../../libs/regenerator-runtime'
+import regeneratorRuntime from '../../libs/regenerator-runtime';
 
 Page({
 
