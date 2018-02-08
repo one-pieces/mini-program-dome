@@ -6,10 +6,13 @@ import regeneratorRuntime from './libs/regenerator-runtime';
 App({
   onLaunch: async function () {
     // 获取用户的登录信息
-    await user.checkLogin();
-    this.globalData.userInfo = wx.getStorageSync('usrInfo');
-    this.globalData.token = wx.getStorageSync('token');
-
+    try {
+      await user.checkLogin();
+      this.globalData.userInfo = wx.getStorageSync('uesrInfo');
+      this.globalData.token = wx.getStorageSync('token');
+    } catch (e) {
+      console.log('user notLogin');
+    }
 
     // 展示本地存储能力
     // var logs = wx.getStorageSync('logs') || []

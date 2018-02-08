@@ -11,7 +11,20 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: {}
+    userInfo: {},
+    menuItems: [{
+      url: '/pages/ucenter/order/order',
+      iconClass: 'order',
+      label: '我的订单'
+    }, {
+      url: '/pages/ucenter/collect/collect',
+      iconClass: 'address',
+      label: '我的收藏'
+    }, {
+      url: '/pages/ucenter/address/address',
+      iconClass: 'address',
+      label: '地址管理'
+    }]
   },
   /**
    * 登录
@@ -21,11 +34,23 @@ Page({
       const { userInfo, token } = await user.loginByWeixin();
       app.globalData.userInfo = userInfo;
       app.globalData.token = token;
-      this.setdata({ userInfo });
+      this.setData({ userInfo });
     } catch(err) {
       console.log('goLogin fail, ', err);
       util.showErrorToast(err);
     }
+  },
+  /**
+   * 跳转到某个页面
+   */
+  navigatorTo(event) {
+    const { token } = app.globalData;
+    if (!token) {
+      util.showErrorToast('点击头像登录');
+      return;
+    }
+    const { url } = event.currentTarget.dataset;
+    wx.navigateTo({ url });
   },
   /**
    * 登出用户
@@ -68,7 +93,7 @@ Page({
     const token = wx.getStorageSync('token');
 
     if (userInfo && token) {
-      app.globalData.userInfo = userinfo;
+      app.globalData.userInfo = userInfo;
       app.globalData.token = token;
     }
 

@@ -39,12 +39,17 @@ const request = (url, data = {}, method = 'GET') => {
               resolve(data);
             } else {
               console.log(errmsg);
+              const duration = 1500;
               wx.showToast({
                 image: '/static/images/icon_error.png',
                 title: errmsg,
-                mask: true
+                mask: true,
+                duration
               });
-              reject(errmsg);
+              // TODO 貌似是wx.showToast的bug，当直接调用reject的时候，toast会立即关闭，使用resolve则没有这个问题
+              setTimeout(() => {
+                reject(errmsg);
+              }, duration);
             }
           }
         } else {
@@ -129,7 +134,7 @@ const showErrorToast = (msg) => {
     title: msg,
     icon: '',
     image: '/static/images/icon_error.png',
-    duration: 0,
+    // duration: 0,
     mask: true,
     success: function(res) {},
     fail: function(res) {},

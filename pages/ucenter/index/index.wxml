@@ -8,12 +8,19 @@
   </view>
 
   <view class='user-menu'>
-    <view class='item'>
+    <view class='item' wx:for='{{menuItems}}' wx:key='{{item.url}}' bindtap='navigatorTo' data-url='{{item.url}}'>
+      <view class='a'> 
+        <text class='icon {{item.iconClass}}'></text>
+        <text class='txt'>{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- <view class='item'>
       <navigator url='/pages/ucenter/order/order' class='a'>
         <text class='icon order'></text>
         <text class='txt'>我的订单</text>
       </navigator>
-    </view>
+    </view> -->
     <!-- <view class='item'>
       <navigator url='/pages/ucenter/coupon/coupon' class='a'>
         <text class='icon coupon'></text>
@@ -26,12 +33,12 @@
         <text class='txt'>礼品卡</text>
       </navigator>
     </view> -->
-    <view class='item'>
+    <!-- <view class='item'>
       <navigator url='/pages/ucenter/collect/collect' class='a'>
         <text class='icon address'></text>
         <text class='txt'>我的收藏</text>
       </navigator>
-    </view>
+    </view> -->
     <!-- <view class='item'>
       <navigator url='/pages/ucenter/footprint/footprint' class='a'>
         <text class='icon security'></text>
@@ -44,12 +51,12 @@
         <text class='txt'>会员福利</text>
       </navigator>
     </view> -->
-    <view class='item'>
+    <!-- <view class='item'>
       <navigator url='/pages/ucenter/address/address' class='a'>
         <text class='icon address'></text>
         <text class='txt'>地址管理</text>
       </navigator>
-    </view>
+    </view> -->
     <!-- <view class='item'>
       <navigator url='url' class='a'>
         <text class='icon security'></text>
