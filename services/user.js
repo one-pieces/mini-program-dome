@@ -31,9 +31,20 @@ const loginByWeixin = () => {
  */
 const checkLogin = () => {
   return new Promise((resolve, reject) => {
+    // 本地缓存是否有用户信息
     if (wx.getStorageSync('userInfo') && wx.getStorageSync('token')) {
-      util.checkSession().then(() => {
-        resolve(true);
+      // 小程序session是否有效
+      util.checkSession().then(async (res) => {
+        // 小程序session有效，还需要检验第三方session
+        const { result, token } = await util.request(api.CheckSession);
+        if (result) {
+          // 当前本地缓存的第三方session有效，则说明本地缓存的用户数据可以直接拿来使用
+          resolve(true);
+        } else {
+          // session无效，则清除本地缓存的用户数据
+          util.removeLocalUserInfo();
+          reject(false);
+        }
       }).catch(() => {
         reject(false);
       });

@@ -7,6 +7,7 @@ module.exports = {
   CatalogCurrent: NewApiRootUrl + 'catalog/current',  //分类目录当前分类数据接口
   
   AuthLoginByWeixin: NewApiRootUrl + 'auth/loginByWeixin', //微信登录
+  CheckSession: NewApiRootUrl + 'auth/checkSession', //检验第三方token是否过期
 
   GoodsCount: NewApiRootUrl + 'goods/count',  //统计商品总数
   GoodsList: NewApiRootUrl + 'goods/list',  //获得商品列表
@@ -36,6 +37,7 @@ module.exports = {
 
   CommentList: NewApiRootUrl + 'comment/list',  //评论列表
   CommentCount: NewApiRootUrl + 'comment/count',  //评论总数
+  CommentPost: NewApiRootUrl + 'comment/post',   //发表评论
 
   TopicList: NewApiRootUrl + 'topic/list',  //专题列表
   TopicDetail: NewApiRootUrl + 'topic/detail',  //专题详情
@@ -44,6 +46,7 @@ module.exports = {
   SearchIndex: NewApiRootUrl + 'search/index',  //搜索页面数据
   SearchResult: NewApiRootUrl + 'search/result',  //搜索数据
   SearchHelper: NewApiRootUrl + 'search/helper',  //搜索帮助
+  SearchClearHistory: NewApiRootUrl + 'search/clearhistory',  //搜索历史清除
 
   AddressList: NewApiRootUrl + 'address/list',  //收货地址列表
   AddressDetail: NewApiRootUrl + 'address/detail',  //收货地址详情
@@ -51,8 +54,6 @@ module.exports = {
   AddressDelete: NewApiRootUrl + 'address/delete',  //保存收货地址
 
   RegionList: NewApiRootUrl + 'region/list',  //获取区域列表
-
-  AuthLogin: NewApiRootUrl + 'auth/login',  //微信登录
 
   OrderList: NewApiRootUrl + 'order/list',  //订单列表
   OrderDetail: NewApiRootUrl + 'order/detail',  //订单详情

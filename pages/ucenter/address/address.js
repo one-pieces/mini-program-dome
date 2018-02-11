@@ -24,9 +24,8 @@ Page({
    */
   addressAddOrUpdate(event) {
     const { addressId } = event.currentTarget.dataset;
-    console.log(event);
     wx.navigateTo({
-      url: `/pages/ucenter/addressAdd/addressAdd?id=${addressId}`
+      url: `/pages/ucenter/addressAdd/addressAdd${ addressId && `?id=${addressId}` || '' }`
     })
   },
   /**
@@ -40,7 +39,7 @@ Page({
       success: async (res) => {
         if (res.confirm) {
           const { addressId: id } = event.target.dataset;
-          await util.requset(api.AddressDelete, { id }, 'POST');
+          await util.request(api.AddressDelete, { id }, 'POST');
           this.getAddressList();
         }
       }
@@ -65,7 +64,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    this.getAddressList();
   },
 
   /**

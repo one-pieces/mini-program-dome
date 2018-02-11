@@ -1,10 +1,18 @@
 // pages/ucenter/addressAdd/addressAdd.js
+import api from '../../../config/api.js';
+import util from '../../../utils/util.js';
+// 在微信小程序使用async,await需要引入regeneratorRuntime变量，具体请看https://ninghao.net/blog/5508
+import regeneratorRuntime from '../../../libs/regenerator-runtime';
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    selectedRegionString: '',
+    multiIndex: [],
+    multiArray: [[], [], []],
     address: {
       id: 0,
       province_id: 0,
@@ -17,16 +25,6 @@ Page({
       is_default: 0
     },
     addressId: 0,
-    openSelectRegion: false,
-    selectRegionList: [{
-      id: 0, name: '省份', parent_id: 1, type: 1
-    }, {
-      id: 0, name: '城市', parent_id: 1, type: 2
-    }, {
-      id: 0, name: '区县', parent_id: 1, type: 3
-    }],
-    regionType: 1,
-    regionList: [],
     selectRegionDone: false
   },
   /**
@@ -70,30 +68,110 @@ Page({
     this.setData({ address });
   },
   /**
-   * 设置区域选择状态
+   * 打开省市区选择器
    */
-  setRegionDoneStatus() {
-    const { selectRegionList } = this.data;
-    const selectRegionDone = selectRegionList.every(item => item.id !== 0);
-    this.setData({ selectRegionDone });
+  async openRegionPicker() {
+    // 初始化省市区选择器
+    let { multiArray, multiIndex } = this.data;
+    multiIndex = [0, 0, 0];
+    multiArray[0] = await util.request(api.RegionList, { parentId: 1 });
+    multiArray[1] = await util.request(api.RegionList, { parentId: multiArray[0][0].id });
+    multiArray[2] = await util.request(api.RegionList, { parentId: multiArray[1][0].id });
+    this.setData({ multiArray, multiIndex });
   },
   /**
-   * 选择区域
+   * 省市区选择器值改变
    */
-  chooseRegion() {
+  bindMultiPickerChange(e) {
+    const { multiArray, multiIndex, address } = this.data;
+    console.log('picker发送选择改变，携带值为', e.detail.value, multiArray);
     this.setData({
-      oepnSelectRegion: !this.data.openSelectRegion
+      multiIndex: e.detail.value,
+      address: Object.assign(address, {
+        full_region: [
+          multiArray[0][multiIndex[0]],
+          multiArray[1][multiIndex[1]],
+          multiArray[2][multiIndex[2]]
+        ].map(item => item.name).join('')
+      })
     });
-    // 设置区域选择数据
-    const { address } = this.data;
-    // if (add)
   },
+  /**
+   * 省市区选择器列改变
+   */
+  async bindMultiPickerColumnChange(e) {
+    const { column, value } = e.detail;
+    console.log('修改的列为', column, '，值为', value);
+    const { multiArray, multiIndex } = this.data;
+    const selectItem = multiArray[column][value];
+    multiIndex[column] = value;
+    switch (column) {
+      case 0:
+        multiArray[1] = await util.request(api.RegionList, { parentId: selectItem.id });
+        multiArray[2] = await util.request(api.RegionList, { parentId: multiArray[1][0].id });
+        multiIndex[1] = 0;
+        multiIndex[2] = 0;
+        break;
+      case 1:
+        multiArray[2] = await util.request(api.RegionList, { parentId: selectItem.id });
+        multiIndex[2] = 0;
+        break;
+    }
+    this.setData({
+      multiArray, multiIndex
+    });
+  },
+  /**
+   * 取消地址编辑
+   */
+  cancel() {
+    wx.navigateBack();
+  },
+  /**
+   * 确认保存地址
+   */
+  async confirm() {
+    const { multiArray, multiIndex, address } = this.data;
+    // 检验地址合法性
+    if (address.name == '') {
+      util.showErrorToast('请输入姓名');
+      return false;
+    }
+    if (address.mobile == '') {
+      util.showErrorToast('请输入手机号码');
+      return false;
+    }
+    if (address.full_region == '') {
+      util.showErrorToast('请输入省市区');
+      return false;
+    }
+    if (address.address == '') {
+      util.showErrorToast('请输入详细地址');
+      return false;
+    }
 
+    const province = multiArray[0][multiIndex[0]];
+    const city = multiArray[1][multiIndex[1]];
+    const district = multiArray[2][multiIndex[2]];
+    address.province_id = province.id;
+    address.district_id = district.id;
+    address.city_id = city.id;
+
+    await util.request(api.AddressSave, address, 'POST');
+    wx.showToast({
+      title: '保存成功'
+    });
+    wx.navigateBack();
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    const { id: addressId } = options;
+    if (addressId) {
+      this.setData({ addressId });
+      this.getAddressDetail();
+    }
   },
 
   /**

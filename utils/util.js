@@ -33,6 +33,7 @@ const request = (url, data = {}, method = 'GET') => {
           // 处理未登录
           if (res.data.errno === 401) {
             console.log('快去登录');
+            removeLocalUserInfo();
           } else {
             const { data, errmsg, errno } = res.data;
             if (errno === 0) {
@@ -116,6 +117,26 @@ const getUserInfo = () => {
 }
 
 /**
+ * 清除缓存的本地用户信息
+ */
+const removeLocalUserInfo = () => {
+  // 清除本地缓存用户信息和token
+  wx.removeStorageSync('userInfo');
+  wx.removeStorageSync('token');
+  // 清除应用实例用户数据
+  const app = getApp();
+  app.globalData = {
+    userInfo: {
+      nickname: 'Hi, 游客',
+      username: '点击去登录',
+      avatar: 'http://yanxuan.nosdn.127.net/8945ae63d940cc42406c3f67019c5cb6.png'
+    },
+    token: ''
+  };
+  console.log('Local user info has been removed.');
+}
+
+/**
  * 跳转到指定页面
  */
 const redirectTo = (url) => {
@@ -149,5 +170,6 @@ export default {
   login,
   getUserInfo,
   redirectTo,
-  showErrorToast
+  showErrorToast,
+  removeLocalUserInfo
 }
