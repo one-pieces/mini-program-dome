@@ -33,6 +33,11 @@ const request = (url, data = {}, method = 'GET') => {
           // 处理未登录
           if (res.data.errno === 401) {
             console.log('快去登录');
+            wx.showToast({
+              image: '/static/images/icon_error.png',
+              title: '请先登录',
+              mask: true
+            });
             removeLocalUserInfo();
           } else {
             const { data, errmsg, errno } = res.data;

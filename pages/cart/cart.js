@@ -1,6 +1,7 @@
 // pages/cart/cart.js
 import util from '../../utils/util.js';
 import api from '../../config/api.js';
+import user from '../../services/user.js';
 // 在微信小程序使用async,await需要引入regeneratorRuntime变量，具体请看https://ninghao.net/blog/5508
 import regeneratorRuntime from '../../libs/regenerator-runtime';
 const app = getApp();
@@ -145,13 +146,19 @@ Page({
     this.updateCart(product_id, goods_id, number, id);
   },
   // 切换到确认订单页
-  checkoutOrder() {
-    const { cartGoods } = this.data;
-    const checkedGoods = cartGoods.filter(item => item.checked);
-    if (checkedGoods.length) {
-      wx.navigateTo({
-        url: '../shopping/checkout/checkout'
-      });
+  async checkoutOrder() {
+    try {
+      // 判断是否有登录
+      await user.checkLogin();
+      const { cartGoods } = this.data;
+      const checkedGoods = cartGoods.filter(item => item.checked);
+      if (checkedGoods.length) {
+        wx.navigateTo({
+          url: '../shopping/checkout/checkout'
+        });
+      }
+    } catch(e) {
+      util.showErrorToast('请先登录');
     }
   },
   // 删除所选商品

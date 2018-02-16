@@ -10,7 +10,9 @@
     "pages/ucenter/order/order",
     "pages/ucenter/orderDetail/orderDetail",
     "pages/ucenter/address/address",
-    "pages/ucenter/addressAdd/addressAdd"
+    "pages/ucenter/addressAdd/addressAdd",
+    "pages/shopping/checkout/checkout",
+    "pages/shopping/address/address"
   ],
   "window": {
     "backgroundTextStyle": "dark",
